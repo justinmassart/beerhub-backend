@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Beer extends Model
 {
     use HasFactory;
+
+    public $incrementing = false;
+
+    public function brand()
+    {
+        $this->hasOne(Brand::class);
+    }
 }

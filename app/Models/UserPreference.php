@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class UserPreference extends Model
 {
     use HasFactory;
+
+    public $incrementing = false;
+
+    public function user()
+    {
+        $this->hasOne(User::class);
+    }
 }
