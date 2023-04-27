@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_preferences', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->enum('metric_system', ['Imperial', 'Metric']);
+            $table->boolean('is_notification_enabled');
+            $table->enum('theme', ['Dark', 'Light']);
             $table->timestamps();
         });
     }

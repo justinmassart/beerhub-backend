@@ -12,7 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('places', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('address');
+            $table->float('latitude');
+            $table->float('longitude');
+            $table->string('country');
+            $table->enum('type', ['abbey', 'brewer', 'wholesaler', 'cafe', 'merchant']);
             $table->timestamps();
         });
     }

@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('beer_brands', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('beer_id')->unique();
+            $table->foreignUuid('brand_id');
             $table->timestamps();
+            $table->index('created_at');
         });
     }
 

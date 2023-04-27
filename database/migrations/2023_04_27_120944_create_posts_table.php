@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->enum('access_rights', ['user', 'allowed_action', 'owner', 'read_only', 'admin']);
-            $table->foreignUuid('user_id')->unique();
             $table->timestamps();
         });
     }
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('posts');
     }
 };
