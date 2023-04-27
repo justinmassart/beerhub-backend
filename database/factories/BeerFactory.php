@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Beer>
@@ -16,16 +17,19 @@ class BeerFactory extends Factory
      */
     public function definition(): array
     {
-        $country = fake()->country();
+        $uuid = Str::uuid();
+        $country = fake()->countryCode();
+        $uuid = Str::uuid();
         return [
+            'id' => $uuid,
             'name' => fake()->word(),
             'type' => fake()->randomElement(['Blond', 'Amber', 'Black', 'Brown', 'White', 'Fruity', 'IPA', 'Stout']),
             'country' => $country,
-            'volume_available' => json_encode('30'),
-            'container_available' => json_encode('bottle'),
+            'volume_available' => json_encode(['25cl', '30cl', '75cl', '1L', '1.5L', '2L']),
+            'container_available' => json_encode(['bottle', 'can', 'barrel']),
             'description' => fake()->paragraphs(3, true),
-            'aromas' => ['apple'],
-            'ingredients' => ['apple', 'water', 'hop'],
+            'aromas' => json_encode(['apple', 'vanilla', 'caramel']),
+            'ingredients' => json_encode(['apple', 'water', 'hop']),
             'color' => fake()->randomElement(['White', 'Black', 'Brown', 'Amber', 'Red', 'Blond', 'Blue']),
             'abv' => fake()->randomFloat(1, 0, 16),
             'ibu' => fake()->randomFloat(1, 0, 54),

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Beer;
 use App\Models\Brand;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BeerBrand>
@@ -18,21 +19,17 @@ class BeerBrandFactory extends Factory
      */
     public function definition(): array
     {
+        $uuid = Str::uuid();
 
         $brand = Brand::factory()->create();
+        $beer = Beer::factory()->create();
 
         return [
-            'beer_id' => Beer::factory()->create(['brand_id' => $brand->id])->id,
+            'id' => $uuid,
+            'beer_id' => $beer->id,
             'brand_id' => $brand->id,
             'created_at' => now(),
             'updated_at' => now(),
         ];
-
-        /*         return [
-            'beer_id' => Beer::factory()->create()->id,
-            'brand_id' => Brand::factory()->create()->id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]; */
     }
 }

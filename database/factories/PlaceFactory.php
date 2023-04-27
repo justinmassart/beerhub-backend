@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Place>
@@ -16,13 +17,15 @@ class PlaceFactory extends Factory
      */
     public function definition(): array
     {
+        $uuid = Str::uuid();
         return [
+            'id' => $uuid,
             'name' => fake()->company(),
             'address' => fake()->address(),
-            'country' => fake()->country(),
-            'type' => fake()->randomElement(['abbey', 'brewer', 'wholesaler', 'cafe', 'merchant']),
             'latitude' => fake()->latitude(),
             'longitude' => fake()->longitude(),
+            'country' => fake()->countryCode(),
+            'type' => fake()->randomElement(['abbey', 'brewer', 'wholesaler', 'cafe', 'merchant']),
             'created_at' => now(),
             'updated_at' => now(),
         ];

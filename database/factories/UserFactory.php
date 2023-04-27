@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\UserPreference;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -18,7 +19,9 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $uuid = Str::uuid();
         return [
+            'id' => $uuid,
             'firstname' => fake()->firstName(),
             'lastname' => fake()->lastName(),
             'phone' => fake()->phoneNumber(),
@@ -26,8 +29,8 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => bcrypt('password'),
             'DOB' => fake()->dateTimeBetween('-50 years', '-16 years'),
-            'country' => fake()->country(),
-            'user_preference_id' => UserPreference::factory()->create()->id,
+            'country' => fake()->countryCode(),
+            'user_preferences_id' => UserPreference::factory()->create()->id,
             'created_at' => now(),
             'updated_at' => now(),
         ];

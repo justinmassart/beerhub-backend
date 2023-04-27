@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Rating>
@@ -16,7 +17,9 @@ class RatingFactory extends Factory
      */
     public function definition(): array
     {
+        $uuid = Str::uuid();
         return [
+            'id' => $uuid,
             //
         ];
     }

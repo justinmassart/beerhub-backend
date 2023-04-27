@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Brand>
@@ -16,13 +17,17 @@ class BrandFactory extends Factory
      */
     public function definition(): array
     {
+        $uuid = Str::uuid();
+        $name = fake()->company() . ' ' . fake()->word();
         return [
-            'name' => fake()->company(),
+            'id' => $uuid,
+            'name' => $name,
+            'slogan' => fake()->catchPhrase(),
             'address' => fake()->address(),
             'latitude' => fake()->latitude(),
             'longitude' => fake()->longitude(),
-            'since' => fake()->numberBetween(700, date('Y')),
-            'country' => fake()->country(),
+            'creation_date' => fake()->numberBetween(700, date('Y')),
+            'country' => fake()->countryCode(),
             'created_at' => now(),
             'updated_at' => now(),
         ];
