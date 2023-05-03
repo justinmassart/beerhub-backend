@@ -10,10 +10,14 @@ class BeerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $locale)
     {
 
-        $beers = Beer::latest('created_at')->paginate(10);
+        $beers = Beer::with(['brand', 'translations' => function ($query) use ($locale) {
+            $query->where('locale', $locale);
+        }])
+            ->latest('created_at')
+            ->paginate(1);
 
         return compact('beers');
     }
