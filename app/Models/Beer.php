@@ -13,6 +13,11 @@ class Beer extends Model
 
     public function brand()
     {
-        $this->hasOne(Brand::class);
+        return $this->hasOne(BeerBrand::class);
+    }
+
+    public function translations()
+    {
+        return $this->hasMany(BeerTranslation::class);
     }
 }
