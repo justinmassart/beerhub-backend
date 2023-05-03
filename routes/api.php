@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\BeerController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\PlaceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+}); */
+
+// Beers
+
+Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware('setLocale');
+
+// Brands
+
+Route::get('/{locale?}/brands', [BrandController::class, 'index'])->middleware('setLocale');
+
+// Places
+
+Route::get('/{locale?}/places', [PlaceController::class, 'index'])->middleware('setLocale');
