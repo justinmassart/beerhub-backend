@@ -12,9 +12,9 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brand = Brand::latest('created_at')->paginate(10);
+        $brands = Brand::latest('created_at')->paginate(10);
 
-        return compact('brand');
+        return compact('brands');
     }
 
     /**
