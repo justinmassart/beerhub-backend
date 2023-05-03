@@ -27,7 +27,6 @@ class BeerFactory extends Factory
             'country' => $country,
             'volume_available' => json_encode(['25cl', '30cl', '75cl', '1L', '1.5L', '2L']),
             'container_available' => json_encode(['bottle', 'can', 'barrel']),
-            'description' => fake()->paragraphs(3, true),
             'aromas' => json_encode(['apple', 'vanilla', 'caramel']),
             'ingredients' => json_encode(['apple', 'water', 'hop']),
             'color' => fake()->randomElement(['White', 'Black', 'Brown', 'Amber', 'Red', 'Blond', 'Blue']),

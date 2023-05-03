@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('country');
             $table->json('volume_available');
             $table->json('container_available');
-            $table->text('description');
             $table->json('aromas');
             $table->json('ingredients');
             $table->enum('color', ['White', 'Black', 'Brown', 'Amber', 'Red', 'Blond', 'Blue']);
