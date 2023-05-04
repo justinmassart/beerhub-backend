@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('locale', ['fr', 'en']);
             $table->text('description');
             $table->foreignUuid('beer_id');
+            $table->boolean('is_default_locale');
             $table->timestamps();
         });
     }

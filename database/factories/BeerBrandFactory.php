@@ -25,8 +25,8 @@ class BeerBrandFactory extends Factory
         $brand = Brand::factory()->create();
         $beer = Beer::factory()->create();
 
-        BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'fr']);
-        BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'en']);
+        BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'fr', 'is_default_locale' => true]);
+        BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'en', 'is_default_locale' => false]);
 
         return [
             'id' => $uuid,
