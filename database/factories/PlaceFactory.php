@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\PlaceTranslation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,6 +19,10 @@ class PlaceFactory extends Factory
     public function definition(): array
     {
         $uuid = Str::uuid();
+
+        PlaceTranslation::factory()->create(['place_id' => $uuid, 'locale' => 'fr', 'is_default_locale' => true]);
+        PlaceTranslation::factory()->create(['place_id' => $uuid, 'locale' => 'en', 'is_default_locale' => false]);
+
         return [
             'id' => $uuid,
             'name' => fake()->company(),

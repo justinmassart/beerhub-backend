@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('beer_translations', function (Blueprint $table) {
+        Schema::create('brand_translations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->enum('locale', config('app.available_locales'));
             $table->text('description');
-            $table->foreignUuid('beer_id');
+            $table->foreignUuid('brand_id');
             $table->boolean('is_default_locale');
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('beer_translations');
+        Schema::dropIfExists('brand_translations');
     }
 };
