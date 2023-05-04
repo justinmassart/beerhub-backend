@@ -5,19 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BeerBrand extends Model
+class PlaceTranslation extends Model
 {
     use HasFactory;
 
     public $incrementing = false;
 
-    public function beer()
+    public function place()
     {
-        return $this->belongsTo(Beer::class);
-    }
-
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Place::class);
     }
 }

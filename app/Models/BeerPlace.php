@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BeerBrand extends Model
+class BeerPlace extends Model
 {
     use HasFactory;
 
@@ -16,8 +16,8 @@ class BeerBrand extends Model
         return $this->belongsTo(Beer::class);
     }
 
-    public function brand()
+    public function place()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(Place::class);
     }
 }

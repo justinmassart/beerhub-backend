@@ -9,6 +9,8 @@ class BeerTranslation extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
     public function beer()
     {
         return $this->belongsTo(Beer::class);

@@ -15,4 +15,9 @@ class Brand extends Model
     {
         return $this->hasMany(BeerBrand::class);
     }
+
+    public function translations()
+    {
+        return $this->hasMany(BrandTranslation::class);
+    }
 }

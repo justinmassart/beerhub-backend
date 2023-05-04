@@ -22,7 +22,7 @@ class BeerController extends Controller
             return $query->where('locale', $locale);
         }])
             ->latest('created_at')
-            ->paginate(1);
+            ->paginate(10);
 
         return compact('beers');
     }
