@@ -15,7 +15,16 @@ it('ensures that the /brands route is accessible and returns data', function () 
     $response = $this->get('/fr/brands');
     $response->assertStatus(200);
 
-    $response_content = json_decode($response->getContent());
+    $data = json_decode($response->getContent());
 
-    expect($response_content->brands->total)->toBeGreaterThanOrEqual(1);
+    expect($data->brands->total)->toBeGreaterThanOrEqual(1);
+});
+
+it('ensures that the data returned is translated in the asked locale', function () {
+    $response = $this->get('/fr/brands');
+    $response->assertStatus(200);
+
+    $data = json_decode($response->getContent());
+
+    expect($data->brands->data[0]->translations[0]->locale)->toBe('fr');
 });

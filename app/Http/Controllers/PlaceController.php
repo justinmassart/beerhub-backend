@@ -10,9 +10,18 @@ class PlaceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $locale)
     {
-        $places = Place::latest('created_at')->paginate(10);
+        $places = Place::with(['beers', 'translations' => function ($query) use ($locale) {
+            if (!in_array($locale, config('app.available_locales'))) {
+                return $query->where('is_default_locale', true);
+            } else {
+                return $query->where('locale', $locale);
+            }
+            return $query->where('locale', $locale);
+        }])
+            ->latest('created_at')
+            ->paginate(1);
 
         return compact('places');
     }

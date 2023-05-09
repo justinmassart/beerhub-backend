@@ -10,4 +10,14 @@ class Place extends Model
     use HasFactory;
 
     public $incrementing = false;
+
+    public function beers()
+    {
+        return $this->hasMany(BeerPlace::class);
+    }
+
+    public function translations()
+    {
+        return $this->hasMany(PlaceTranslation::class);
+    }
 }

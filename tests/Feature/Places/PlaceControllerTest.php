@@ -15,7 +15,16 @@ it('ensures that the /places route is accessible and returns data', function () 
     $response = $this->get('/fr/places');
     $response->assertStatus(200);
 
-    $response_content = json_decode($response->getContent());
+    $data = json_decode($response->getContent());
 
-    expect($response_content->places->total)->toBeGreaterThanOrEqual(1);
+    expect($data->places->total)->toBeGreaterThanOrEqual(1);
+});
+
+it('ensures that the data returned is translated in the asked locale', function () {
+    $response = $this->get('/fr/places');
+    $response->assertStatus(200);
+
+    $data = json_decode($response->getContent());
+
+    expect($data->places->data[0]->translations[0]->locale)->toBe('fr');
 });
