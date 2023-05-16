@@ -25,6 +25,7 @@ return new class extends Migration
             $table->float('ibu');
             $table->boolean('is_from_abbey');
             $table->timestamps();
+            $table->softDeletes();
             $table->index('created_at', 'name');
         });
     }

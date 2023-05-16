@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('beer_id');
             $table->foreignUuid('place_id');
             $table->timestamps();
+            $table->softDeletes();
             $table->index('created_at');
         });
     }

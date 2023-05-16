@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('access_rights', ['user', 'allowed_action', 'owner', 'read_only', 'admin']);
             $table->foreignUuid('user_id')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

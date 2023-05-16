@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('country');
             $table->foreignUuid('user_preferences_id')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

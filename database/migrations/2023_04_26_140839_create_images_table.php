@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('url');
+            $table->foreignUuid('added_by_user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

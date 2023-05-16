@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('is_notification_enabled');
             $table->enum('theme', ['Dark', 'Light']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

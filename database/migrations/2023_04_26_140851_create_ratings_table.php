@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ratings', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

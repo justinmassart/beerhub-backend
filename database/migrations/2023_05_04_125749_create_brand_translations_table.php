@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignUuid('brand_id');
             $table->boolean('is_default_locale');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
