@@ -13,14 +13,14 @@ class BeerController extends Controller
     public function index(string $locale)
     {
 
-        $beers = Beer::with(['brand', 'translations' => function ($query) use ($locale) {
-            if (!in_array($locale, config('app.available_locales'))) {
-                return $query->where('is_default_locale', true);
-            } else {
-                return $query->where('locale', $locale);
-            }
-            return $query->where('locale', $locale);
-        }])
+        $beers = Beer::with(['brand.brand'])
+            ->with(['translations' => function ($query) use ($locale) {
+                if (!in_array($locale, config('app.available_locales'))) {
+                    return $query->where('is_default_locale', true);
+                } else {
+                    return $query->where('locale', $locale);
+                }
+            }])
             ->latest('created_at')
             ->paginate(10);
 
