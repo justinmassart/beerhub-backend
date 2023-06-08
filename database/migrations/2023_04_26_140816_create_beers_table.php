@@ -23,7 +23,10 @@ return new class extends Migration
             $table->enum('color', ['White', 'Black', 'Brown', 'Amber', 'Red', 'Blond', 'Blue']);
             $table->float('abv');
             $table->float('ibu');
+            $table->boolean('is_gluten_free');
             $table->boolean('is_from_abbey');
+            $table->boolean('non_filtered');
+            $table->boolean('refermented');
             $table->timestamps();
             $table->softDeletes();
             $table->index('created_at', 'name');
