@@ -27,6 +27,7 @@ Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware('se
 // Brands
 
 Route::get('/{locale?}/brands', [BrandController::class, 'index'])->middleware('setLocale');
+Route::get('/{locale?}/brands/{id}/', [BrandController::class, 'show'])->middleware('setLocale');
 
 // Places
 
