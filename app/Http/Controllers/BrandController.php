@@ -45,9 +45,20 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $locale, string $id)
     {
-        //
+        $brand = Brand::with('beers')
+            ->with(['translations' => function ($query) use ($locale) {
+                if (!in_array($locale, config('app.available_locales'))) {
+                    return $query->where('is_default_locale', true);
+                } else {
+                    return $query->where('locale', $locale);
+                }
+            }])
+            ->where('id', $id)
+            ->get();
+
+        return compact('brand');
     }
 
     /**
