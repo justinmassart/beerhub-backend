@@ -6,7 +6,6 @@ use App\Models\Beer;
 use App\Models\Brand;
 use App\Models\BeerTranslation;
 use App\Models\BrandTranslation;
-use App\Models\PlaceTranslation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

@@ -10,6 +10,8 @@ use App\Models\BeerPlace;
 use App\Models\BeerRating;
 use App\Models\PlaceRating;
 use Illuminate\Database\Seeder;
+use App\Models\BeerRatingTotal;
+use App\Models\PlaceRatingTotal;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,5 +25,7 @@ class DatabaseSeeder extends Seeder
         BeerPlace::factory(100)->create();
         BeerRating::factory(1000)->create();
         PlaceRating::factory(1000)->create();
+        BeerRatingTotal::factory(1000)->create();
+        PlaceRatingTotal::factory(1000)->create();
     }
 }
