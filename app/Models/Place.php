@@ -16,6 +16,11 @@ class Place extends Model
         return $this->hasMany(BeerPlace::class);
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(PlaceRating::class);
+    }
+
     public function translations()
     {
         return $this->hasMany(PlaceTranslation::class);
