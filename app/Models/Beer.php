@@ -26,6 +26,11 @@ class Beer extends Model
         return $this->hasOne(BeerRatingTotal::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(BeerImage::class);
+    }
+
     public function translations()
     {
         return $this->hasMany(BeerTranslation::class);
