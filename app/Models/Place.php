@@ -21,6 +21,11 @@ class Place extends Model
         return $this->hasMany(PlaceRatingTotal::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(PlaceImage::class);
+    }
+
     public function translations()
     {
         return $this->hasMany(PlaceTranslation::class);

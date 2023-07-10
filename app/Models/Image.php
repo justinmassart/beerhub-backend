@@ -10,4 +10,14 @@ class Image extends Model
     use HasFactory;
 
     public $incrementing = false;
+
+    public function beer()
+    {
+        return $this->belongsTo(BeerImage::class);
+    }
+
+    public function place()
+    {
+        return $this->belongsTo(PlaceImage::class);
+    }
 }
