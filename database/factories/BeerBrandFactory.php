@@ -3,10 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Beer;
+use App\Models\BeerImage;
 use App\Models\BeerRatingTotal;
 use App\Models\Brand;
 use App\Models\BeerTranslation;
 use App\Models\BrandTranslation;
+use App\Models\Image;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -28,6 +30,9 @@ class BeerBrandFactory extends Factory
         $beer = Beer::factory()->create();
 
         BeerRatingTotal::factory()->create(['beer_id' => $beer->id]);
+
+        $beerImage = Image::factory()->create();
+        BeerImage::factory()->create(['beer_id' => $beer->id, 'image_id' => $beerImage->id]);
 
         BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'fr', 'is_default_locale' => true]);
         BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'en', 'is_default_locale' => false]);

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,11 @@ class BeerImageFactory extends Factory
      */
     public function definition(): array
     {
+        $uuid = Str::uuid();
         return [
-            //
+            'id' => $uuid,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
