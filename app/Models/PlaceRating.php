@@ -16,7 +16,7 @@ class PlaceRating extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function beer()
+    public function place()
     {
         return $this->belongsTo(Place::class);
     }
