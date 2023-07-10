@@ -13,7 +13,7 @@ class BeerController extends Controller
     public function index(string $locale)
     {
 
-        $beers = Beer::with(['brand.brand'])
+        $beers = Beer::with(['brand.brand', 'ratings'])
             ->with(['translations' => function ($query) use ($locale) {
                 if (!in_array($locale, config('app.available_locales'))) {
                     return $query->where('is_default_locale', true);
