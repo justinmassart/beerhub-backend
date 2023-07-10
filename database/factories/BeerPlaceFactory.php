@@ -28,8 +28,11 @@ class BeerPlaceFactory extends Factory
         $place = Place::factory()->create();
         $beer = Beer::all()->random();
 
-        $placeImage = Image::factory()->create();
-        PlaceImage::factory()->create(['place_id' => $beer->id, 'image_id' => $placeImage->id]);
+        $placeImages = Image::factory(fake()->numberBetween(1, 4))->create();
+
+        foreach ($placeImages as $image) {
+            PlaceImage::factory()->create(['place_id' => $place->id, 'image_id' => $image->id]);
+        }
 
         PlaceRatingTotal::factory()->create(['place_id' => $place->id]);
 

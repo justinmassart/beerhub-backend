@@ -31,8 +31,12 @@ class BeerBrandFactory extends Factory
 
         BeerRatingTotal::factory()->create(['beer_id' => $beer->id]);
 
-        $beerImage = Image::factory()->create();
-        BeerImage::factory()->create(['beer_id' => $beer->id, 'image_id' => $beerImage->id]);
+        $beerImages = Image::factory(fake()->numberBetween(1, 4))->create();
+
+        foreach ($beerImages as $image) {
+            BeerImage::factory()->create(['beer_id' => $beer->id, 'image_id' => $image->id]);
+        }
+
 
         BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'fr', 'is_default_locale' => true]);
         BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'en', 'is_default_locale' => false]);
