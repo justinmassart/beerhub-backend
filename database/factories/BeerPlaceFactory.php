@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Beer;
 use App\Models\Place;
+use App\Models\PlaceRatingTotal;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -24,6 +25,8 @@ class BeerPlaceFactory extends Factory
 
         $place = Place::factory()->create();
         $beer = Beer::all()->random();
+
+        PlaceRatingTotal::factory()->create(['place_id' => $place->id]);
 
         return [
             'id' => $uuid,

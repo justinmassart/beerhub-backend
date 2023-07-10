@@ -25,7 +25,5 @@ class DatabaseSeeder extends Seeder
         BeerPlace::factory(100)->create();
         BeerRating::factory(1000)->create();
         PlaceRating::factory(1000)->create();
-        BeerRatingTotal::factory(1000)->create();
-        PlaceRatingTotal::factory(1000)->create();
     }
 }

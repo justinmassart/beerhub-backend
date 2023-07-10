@@ -21,17 +21,11 @@ class PlaceRatingTotalFactory extends Factory
     {
         $uuid = Str::uuid();
 
-        $place = Place::all()->random();
-        $totalRater = PlaceRating::where('place_id', $place->id)->count();
-        $averageRating = PlaceRating::where('place_id', $place->id)->avg('rating');
-
-        if (!$averageRating) {
-            $averageRating = 0;
-        }
+        $totalRater = fake()->numberBetween(1, 15682);
+        $averageRating = fake()->randomFloat(1, 1, 5);
 
         return [
             'id' => $uuid,
-            'place_id' => $place->id,
             'average_rating' => $averageRating,
             'total_rater' => $totalRater,
             'created_at' => now(),

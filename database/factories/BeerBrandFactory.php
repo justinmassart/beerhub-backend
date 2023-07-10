@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Beer;
+use App\Models\BeerRatingTotal;
 use App\Models\Brand;
 use App\Models\BeerTranslation;
 use App\Models\BrandTranslation;
@@ -25,6 +26,8 @@ class BeerBrandFactory extends Factory
 
         $brand = Brand::factory()->create();
         $beer = Beer::factory()->create();
+
+        BeerRatingTotal::factory()->create(['beer_id' => $beer->id]);
 
         BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'fr', 'is_default_locale' => true]);
         BeerTranslation::factory()->create(['beer_id' => $beer->id, 'locale' => 'en', 'is_default_locale' => false]);
