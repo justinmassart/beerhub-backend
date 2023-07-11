@@ -12,7 +12,7 @@ class PlaceController extends Controller
      */
     public function index(string $locale)
     {
-        $places = Place::with(['beers', 'translations' => function ($query) use ($locale) {
+        $places = Place::with(['beers', 'ratings', 'translations' => function ($query) use ($locale) {
             if (!in_array($locale, config('app.available_locales'))) {
                 return $query->where('is_default_locale', true);
             } else {
