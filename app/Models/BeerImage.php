@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class BeerImage extends Model
 {
     use HasFactory;
 
@@ -13,11 +13,11 @@ class Image extends Model
 
     public function beer()
     {
-        return $this->belongsTo(BeerImage::class);
+        return $this->belongsTo(Beer::class);
     }
 
-    public function place()
+    public function images()
     {
-        return $this->belongsTo(PlaceImage::class);
+        return $this->hasMany(Images::class);
     }
 }

@@ -7,7 +7,11 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\BeerBrand;
 use App\Models\BeerPlace;
+use App\Models\BeerRating;
+use App\Models\PlaceRating;
 use Illuminate\Database\Seeder;
+use App\Models\BeerRatingTotal;
+use App\Models\PlaceRatingTotal;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,5 +23,7 @@ class DatabaseSeeder extends Seeder
         Role::factory(100)->create();
         BeerBrand::factory(250)->create();
         BeerPlace::factory(100)->create();
+        BeerRating::factory(1000)->create();
+        PlaceRating::factory(1000)->create();
     }
 }

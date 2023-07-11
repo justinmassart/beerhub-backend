@@ -32,7 +32,10 @@ class BeerFactory extends Factory
             'color' => fake()->randomElement(['White', 'Black', 'Brown', 'Amber', 'Red', 'Blond', 'Blue']),
             'abv' => fake()->randomFloat(1, 0, 16),
             'ibu' => fake()->randomFloat(1, 0, 54),
+            'is_gluten_free' => fake()->numberBetween(0, 1),
             'is_from_abbey' => ($country === 'Belgium' || $country === 'Austria' ? fake()->randomElement([true, false]) : false),
+            'non_filtered' => fake()->numberBetween(0, 1),
+            'refermented' => fake()->numberBetween(0, 1),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('creation_date');
             $table->string('country');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

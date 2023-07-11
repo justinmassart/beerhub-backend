@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class PlaceRating extends Model
 {
     use HasFactory;
 
     public $incrementing = false;
 
-    public function beer()
+    public function user()
     {
-        return $this->belongsTo(BeerImage::class);
+        return $this->belongsTo(User::class);
     }
 
     public function place()
     {
-        return $this->belongsTo(PlaceImage::class);
+        return $this->belongsTo(Place::class);
     }
 }

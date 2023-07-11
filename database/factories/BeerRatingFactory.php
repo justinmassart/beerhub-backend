@@ -2,14 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Models\Beer;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Image>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BeerRating>
  */
-class ImageFactory extends Factory
+class BeerRatingFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,13 +21,16 @@ class ImageFactory extends Factory
     {
         $uuid = Str::uuid();
 
+        $beer = Beer::all()->random();
+        $user = User::all()->random();
+
         return [
             'id' => $uuid,
-            'url' => fake()->imageUrl(480, 640, 'beers', true, null, true),
-            'added_by_user_id' => User::all()->random(),
+            'user_id' => $user->id,
+            'beer_id' => $beer->id,
+            'rating' => fake()->numberBetween(1, 5),
             'created_at' => now(),
             'updated_at' => now(),
-            //
         ];
     }
 }

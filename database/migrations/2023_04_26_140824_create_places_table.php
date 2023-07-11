@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('country');
             $table->enum('type', ['abbey', 'brewer', 'wholesaler', 'cafe', 'merchant']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

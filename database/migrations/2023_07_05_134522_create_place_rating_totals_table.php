@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('brand_translations', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->enum('locale', config('app.available_locales'));
-            $table->text('description');
-            $table->foreignUuid('brand_id');
-            $table->boolean('is_default_locale');
+        Schema::create('place_rating_totals', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->foreignUuid('place_id');
+            $table->float('average_rating');
+            $table->integer('total_rater');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('brand_translations');
+        Schema::dropIfExists('place_rating_totals');
     }
 };

@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ratings', function (Blueprint $table) {
+        Schema::create('user_images', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('user_id');
+            $table->foreignUuid('image_id');
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ratings');
+        Schema::dropIfExists('user_images');
     }
 };

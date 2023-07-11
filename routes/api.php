@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BeerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PlaceController;
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 }); */
 
+// Home
+
+Route::get('/', [HomeController::class, 'index'])->middleware('setLocale');
+Route::get('/{locale?}/', [HomeController::class, 'index'])->middleware('setLocale');
+
 // Beers
 
 Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware('setLocale');
@@ -27,6 +33,7 @@ Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware('se
 // Brands
 
 Route::get('/{locale?}/brands', [BrandController::class, 'index'])->middleware('setLocale');
+Route::get('/{locale?}/brands/{id}/', [BrandController::class, 'show'])->middleware('setLocale');
 
 // Places
 
