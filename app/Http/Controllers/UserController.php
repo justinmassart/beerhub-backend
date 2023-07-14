@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 use App\Models\User;
 use App\Http\Requests\SignUpFormRequest;
 use App\Models\Role;
+use App\Models\UserPreference;
 
 class UserController extends Controller
 {
@@ -32,35 +34,48 @@ class UserController extends Controller
     public function store(SignUpFormRequest $request)
     {
         $validated = $request->safe()->only(
-            'first_name',
-            'last_name',
+            'firstname',
+            'lastname',
             'username',
             'email',
             'country',
             'password',
-            'confirm_password'
         );
+
 
         try {
             if ($validated) {
+                $uuid = Str::uuid();
+                $roleUuid = Str::uuid();
+
+                $userPref = UserPreference::factory()->create();
+
                 $user = User::create([
-                    'first_name' => $validated['first_name'],
-                    'last_name' => $validated['last_name'],
-                    'username' => $validated['userename'],
+                    'id' => $uuid,
+                    'firstname' => $validated['firstname'],
+                    'lastname' => $validated['lastname'],
+                    'username' => $validated['username'],
                     'email' => $validated['email'],
-                    'country' => $validated['country'],
                     'password' => bcrypt($validated['password']),
+                    'DOB' => '2000-11-09',
+                    'country' => $validated['country'],
+                    'user_preferences_id' => $userPref->id,
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]);
 
                 Role::create([
+                    'id' => $roleUuid,
                     'access_rights' => 'user',
                     'user_id' => $user->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
 
-                return response()->json(['success' => 'ACCOUNT_CREATED', 'user' => [$user->first_name]]);
+                return response()->json(['success' => 'ACCOUNT_CREATED', 'user' => $user->firstname]);
             }
         } catch (\Exception $e) {
-            return response()->json(['error' => 'FAILED_TO_CREATE_USER']);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
