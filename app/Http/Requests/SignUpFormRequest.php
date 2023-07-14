@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Http\Response;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SignUpFormRequest extends FormRequest
 {
@@ -32,5 +35,23 @@ class SignUpFormRequest extends FormRequest
             'country' => 'required',
             'password' => 'required|min:6|max:64',
         ];
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $response = [
+            'error' => 'Validation failed',
+            'message' => $validator->errors()->all(),
+        ];
+
+        throw new HttpResponseException(response()->json($response, Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }
