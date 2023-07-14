@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Http\Requests\SignUpFormRequest;
 use App\Models\Role;
 use App\Models\UserPreference;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -45,6 +46,8 @@ class UserController extends Controller
 
         try {
             if ($validated) {
+                DB::beginTransaction();
+
                 $uuid = Str::uuid();
                 $roleUuid = Str::uuid();
 
@@ -72,9 +75,13 @@ class UserController extends Controller
                     'updated_at' => now(),
                 ]);
 
+                DB::commit();
+
                 return response()->json(['success' => 'ACCOUNT_CREATED', 'user' => $user->firstname]);
             }
         } catch (\Exception $e) {
+            DB::rollBack();
+
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
