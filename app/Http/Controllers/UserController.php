@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 use App\Models\User;
-use App\Http\Requests\SignUpFormRequest;
 use App\Models\Role;
 use App\Models\UserPreference;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\SignUpFormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -77,7 +79,11 @@ class UserController extends Controller
 
                 DB::commit();
 
-                return response()->json(['success' => 'ACCOUNT_CREATED', 'user' => $user->firstname]);
+                event(new Registered($user));
+
+                Auth::login($user);
+
+                return response()->json(['success' => 'ACCOUNT_CREATED', 'user' => $user]);
             }
         } catch (\Exception $e) {
             DB::rollBack();
