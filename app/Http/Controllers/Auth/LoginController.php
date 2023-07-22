@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginFormRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -36,5 +40,28 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(LoginFormRequest $request)
+    {
+        $validated = $request->safe()->only(
+            'email',
+            'password',
+            'device_name',
+        );
+
+        $user = User::where('email', $validated['email'])->first();
+
+        if (!$user->email_verified_at) {
+            return response()->json(['ERROR' => 'EMAIL_NOT_VERIFIED']);
+        }
+
+        if (!$user || !Hash::check($validated['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+
+        return $user->createToken($validated['device_name'])->plainTextToken;
     }
 }
