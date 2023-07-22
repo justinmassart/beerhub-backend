@@ -81,8 +81,6 @@ class UserController extends Controller
 
                 event(new Registered($user));
 
-                Auth::login($user);
-
                 return response()->json(['success' => 'ACCOUNT_CREATED', 'user' => $user]);
             }
         } catch (\Exception $e) {
@@ -122,5 +120,16 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function revokeToken(string $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['ERROR' => 'USER_NOT_FOUND'], 404);
+        }
+
+        $user->tokens()->delete();
     }
 }
