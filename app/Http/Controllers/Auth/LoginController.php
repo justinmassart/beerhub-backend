@@ -52,16 +52,18 @@ class LoginController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
+        if (!$user) {
+            return response()->json(['ERROR' => 'EMAIL_NOT_EXISTS'], 403);
+        }
+
         if (!$user->email_verified_at) {
-            return response()->json(['ERROR' => 'EMAIL_NOT_VERIFIED']);
+            return response()->json(['ERROR' => 'EMAIL_NOT_VERIFIED'], 403);
         }
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        if (!Hash::check($validated['password'], $user->password)) {
+            return response()->json(['ERROR' => 'WRONG_PASSWORD'], 403);
         }
 
-        return $user->createToken($validated['device_name'])->plainTextToken;
+        return [$user, $user->createToken($validated['device_name'])->plainTextToken];
     }
 }
