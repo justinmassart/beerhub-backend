@@ -64,6 +64,6 @@ class LoginController extends Controller
             return response()->json(['ERROR' => 'WRONG_PASSWORD'], 403);
         }
 
-        return [$user, $user->createToken($validated['device_name'])->plainTextToken];
+        return response()->json(['user' => $user, 'authToken' => $user->createToken($validated['device_name'])->plainTextToken]);
     }
 }
