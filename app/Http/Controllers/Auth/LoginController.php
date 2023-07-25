@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginFormRequest;
+use App\Http\Requests\LogoutFormRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -40,6 +43,27 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function revokeToken(LogoutFormRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+        } catch (ValidationException $exception) {
+            return response()->json(['error' => 'Validation failed', 'message' => $exception->errors()], 422);
+        }
+
+        $user = User::find($validated['id']);
+
+        if (!$user) {
+            return response()->json(['ERROR' => 'USER_NOT_FOUND'], 404);
+        }
+
+        Auth::login($user);
+
+        $user->tokens()->delete();
+
+        return response()->json(['SUCCESS' => 'TOKEN_REVOKED'], 200);
     }
 
     public function login(LoginFormRequest $request)

@@ -10,7 +10,7 @@ class BeerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(string $locale)
+    public function index(Request $request, string $locale)
     {
 
         $beers = Beer::with(['brand.brand', 'ratings', 'translations' => function ($query) use ($locale) {

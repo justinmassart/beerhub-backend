@@ -10,4 +10,5 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
     protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
+    protected $table = 'personal_access_tokens';
 }

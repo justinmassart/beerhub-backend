@@ -11,7 +11,6 @@ use App\Models\UserPreference;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\SignUpFormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -120,16 +119,5 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function revokeToken(string $id)
-    {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json(['ERROR' => 'USER_NOT_FOUND'], 404);
-        }
-
-        $user->tokens()->delete();
     }
 }

@@ -31,7 +31,7 @@ Route::get('/{locale?}/', [HomeController::class, 'index'])->middleware('setLoca
 
 // Beers
 
-Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware('setLocale');
+Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware(['auth:sanctum', 'setLocale']);
 
 // Brands
 
@@ -47,3 +47,7 @@ Route::get('/{locale?}/places', [PlaceController::class, 'index'])->middleware('
 Route::post('/register', [UserController::class,  'store'])->middleware(['setLocale', 'guest']);
 
 Route::post('/login', [LoginController::class, 'login'])->middleware(['setLocale', 'guest']);
+
+//Route::post('/logout', [LoginController::class, 'revokeToken'])->middleware(['setLocale', 'auth:sanctum']);
+
+Route::post('/logout', [LoginController::class, 'revokeToken'])->middleware('auth:sanctum');
