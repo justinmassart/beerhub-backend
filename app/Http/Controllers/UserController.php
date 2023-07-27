@@ -10,7 +10,7 @@ use App\Models\Role;
 use App\Models\UserPreference;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Events\Registered;
-use App\Http\Requests\SignUpFormRequest;
+use App\Http\Requests\RegisterFormRequest;
 
 class UserController extends Controller
 {
@@ -33,7 +33,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SignUpFormRequest $request)
+    public function store(RegisterFormRequest $request)
     {
         $validated = $request->safe()->only(
             'firstname',

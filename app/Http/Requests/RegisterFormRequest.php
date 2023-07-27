@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class SignUpFormRequest extends FormRequest
+class RegisterFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +31,7 @@ class SignUpFormRequest extends FormRequest
             'lastname' => 'required|alpha',
             'username' => 'required|unique:users|max:24',
             'email' => 'required|email|unique:users',
-            //'avatar' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:max_width=1920,max_height=1080',
+            'phone' => 'required',
             'country' => 'required',
             'password' => 'required|min:6|max:64',
         ];

@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\API\SessionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BeerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PlaceController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,10 +43,8 @@ Route::get('/{locale?}/places', [PlaceController::class, 'index'])->middleware('
 
 // Auth
 
-Route::post('/register', [UserController::class,  'store'])->middleware(['setLocale', 'guest']);
+Route::post('/register', [SessionController::class,  'register'])->middleware(['setLocale', 'guest']);
 
-Route::post('/login', [LoginController::class, 'login'])->middleware(['setLocale', 'guest']);
+Route::post('/login', [SessionController::class, 'login'])->middleware(['setLocale', 'guest']);
 
-//Route::post('/logout', [LoginController::class, 'revokeToken'])->middleware(['setLocale', 'auth:sanctum']);
-
-Route::post('/logout', [LoginController::class, 'revokeToken'])->middleware('auth:sanctum');
+Route::post('/logout', [SessionController::class, 'logout'])->middleware('auth');

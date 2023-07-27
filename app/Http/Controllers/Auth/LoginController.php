@@ -59,9 +59,9 @@ class LoginController extends Controller
             return response()->json(['ERROR' => 'USER_NOT_FOUND'], 404);
         }
 
-        Auth::login($user);
-
         $user->tokens()->delete();
+
+        Auth::logout($user);
 
         return response()->json(['SUCCESS' => 'TOKEN_REVOKED'], 200);
     }
@@ -87,6 +87,8 @@ class LoginController extends Controller
         if (!Hash::check($validated['password'], $user->password)) {
             return response()->json(['ERROR' => 'WRONG_PASSWORD'], 403);
         }
+
+        Auth::login($user);
 
         return response()->json(['user' => $user, 'authToken' => $user->createToken($validated['device_name'])->plainTextToken]);
     }
