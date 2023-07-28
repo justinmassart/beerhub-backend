@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginFormRequest;
 use App\Http\Requests\LogoutFormRequest;
 use App\Http\Requests\RegisterFormRequest;
+use App\Http\Requests\VerifyPhoneFormRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserPreference;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
+use Twilio\Rest\Client;
 
 class SessionController extends Controller
 {
@@ -69,14 +71,51 @@ class SessionController extends Controller
                     'user_id' => $user->id,
                 ]);
 
-                // event(new Registered($user));
+                $sid = getenv("TWILIO_ACCOUNT_SID");
+                $token = getenv("TWILIO_AUTH_TOKEN");
+                $service = getenv("TWILIO_SERVICE_SID");
+
+                $twilio = new Client($sid, $token);
+
+                $verification = $twilio->verify->v2->services($service)
+                    ->verifications
+                    ->create("+32494391109", "sms");
 
                 DB::commit();
 
-                return response()->json(['SUCCESS' => 'ACCOUNT_CREATED', 'user' => $user], 200);
+                return response()->json(['SUCCESS' => 'ACCOUNT_CREATED', 'user' => $user, 'verification' => $verification->status], 200);
             } catch (\Exception $e) {
                 DB::rollBack();
 
+                return response()->json(['ERROR' => $e->getMessage()], 401);
+            }
+        }
+    }
+
+    public function verifyPhone(VerifyPhoneFormRequest $request)
+    {
+
+        $validated = $request->safe()->only('code');
+
+        if ($validated) {
+            try {
+                $sid = getenv("TWILIO_ACCOUNT_SID");
+                $token = getenv("TWILIO_AUTH_TOKEN");
+                $service = getenv("TWILIO_SERVICE_SID");
+
+                $twilio = new Client($sid, $token);
+
+                $verification_check = $twilio->verify->v2->services($service)
+                    ->verificationChecks
+                    ->create(
+                        [
+                            "to" => "+32494391109",
+                            "code" => $validated['code']
+                        ]
+                    );
+
+                return response()->json(['SUCCESS' => 'PHONE_VERIFIED'], 200);
+            } catch (\Exception $e) {
                 return response()->json(['ERROR' => $e->getMessage()], 401);
             }
         }
