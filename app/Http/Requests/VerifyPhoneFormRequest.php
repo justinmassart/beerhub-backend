@@ -28,6 +28,7 @@ class VerifyPhoneFormRequest extends FormRequest
     {
         return [
             'code' => 'required|numeric|digits:6',
+            'phone' => 'required',
         ];
     }
 
