@@ -9,7 +9,9 @@ use App\Http\Requests\RegisterFormRequest;
 use App\Http\Requests\VerifyPhoneFormRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserPhoneVerification;
 use App\Models\UserPreference;
+use Error;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -71,19 +73,32 @@ class SessionController extends Controller
                     'user_id' => $user->id,
                 ]);
 
+                $verificationCode = mt_rand(100000, 999999);
+
+                UserPhoneVerification::create([
+                    'user_id' => $user->id,
+                    'user_phone' => $validated['phone'],
+                    'code' => $verificationCode,
+                ]);
+
                 $sid = getenv("TWILIO_ACCOUNT_SID");
                 $token = getenv("TWILIO_AUTH_TOKEN");
-                $service = getenv("TWILIO_SERVICE_SID");
+                $messagingServiceSid = getenv("TWILIO_MESSAGING_SERVICE_SID");
 
                 $twilio = new Client($sid, $token);
 
-                $verification = $twilio->verify->v2->services($service)
-                    ->verifications
-                    ->create("+32494391109", "sms");
+                $message = $twilio->messages
+                    ->create(
+                        $validated['phone'],
+                        array(
+                            "messagingServiceSid" => $messagingServiceSid,
+                            "body" => "Hello ! Your verification code for Beerhub is : {$verificationCode}"
+                        )
+                    );
 
                 DB::commit();
 
-                return response()->json(['SUCCESS' => 'ACCOUNT_CREATED', 'user' => $user, 'verification' => $verification->status], 200);
+                return response()->json(['SUCCESS' => 'ACCOUNT_CREATED', 'user' => $user, 'status' => $message->status], 200);
             } catch (\Exception $e) {
                 DB::rollBack();
 
@@ -95,27 +110,33 @@ class SessionController extends Controller
     public function verifyPhone(VerifyPhoneFormRequest $request)
     {
 
-        $validated = $request->safe()->only('code');
+        $validated = $request->safe()->only('code', 'phone');
 
         if ($validated) {
             try {
-                $sid = getenv("TWILIO_ACCOUNT_SID");
-                $token = getenv("TWILIO_AUTH_TOKEN");
-                $service = getenv("TWILIO_SERVICE_SID");
+                DB::beginTransaction();
 
-                $twilio = new Client($sid, $token);
+                $validated['phone'] = '+' . $validated['phone'];
 
-                $verification_check = $twilio->verify->v2->services($service)
-                    ->verificationChecks
-                    ->create(
-                        [
-                            "to" => "+32494391109",
-                            "code" => $validated['code']
-                        ]
-                    );
+                $user = User::where('phone', $validated['phone'])->first();
+                $userVerification = UserPhoneVerification::where('user_id', $user->id)->first();
 
-                return response()->json(['SUCCESS' => 'PHONE_VERIFIED'], 200);
+                if (intval($validated['code']) === $userVerification->code && $validated['phone'] === $userVerification->user_phone) {
+
+                    $user->phone_verified_at = now();
+
+                    $userVerification->delete();
+
+                    $user->save();
+
+                    DB::commit();
+
+                    return response()->json(['SUCCESS' => 'PHONE_VERIFIED'], 200);
+                } else {
+                    return response()->json(['ERROR' => 'WRONG_CODE'], 404);
+                }
             } catch (\Exception $e) {
+                DB::rollBack();
                 return response()->json(['ERROR' => $e->getMessage()], 401);
             }
         }
