@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Role::class);
     }
+
+    public function phone_verification()
+    {
+        return $this->hasOne(UserPhoneVerification::class);
+    }
 }
