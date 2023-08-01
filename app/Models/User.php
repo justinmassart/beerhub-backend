@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserPhoneVerification::class);
     }
+
+    public function token()
+    {
+        return $this->hasOne(PersonalAccessToken::class);
+    }
 }

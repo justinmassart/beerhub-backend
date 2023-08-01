@@ -30,7 +30,7 @@ Route::get('/{locale?}/', [HomeController::class, 'index'])->middleware('setLoca
 
 // Beers
 
-Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware(['auth:sanctum', 'setLocale']);
+Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware(['api.user', 'setLocale']);
 
 // Brands
 
