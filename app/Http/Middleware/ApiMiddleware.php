@@ -14,13 +14,13 @@ class ApiMiddleware
         $token = $request->bearerToken();
 
         if (!$token) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['ERROR' => 'UNAUTHORIZE'], 401);
         }
 
         $tokenModel = PersonalAccessToken::where('token', $token)->first();
 
         if (!$tokenModel) {
-            return response()->json(['message' => 'Invalid token'], 401);
+            return response()->json(['ERROR' => 'INVALID_TOKEN'], 401);
         }
 
         $userAbility = 'api.' . $tokenModel->abilities;
@@ -28,7 +28,7 @@ class ApiMiddleware
         $routePermission = $request->route()->middleware();
 
         if (!in_array($userAbility, $routePermission)) {
-            return response()->json(['message' => 'Insufficient privileges'], 403);
+            return response()->json(['ERROR' => 'NO_PERMISSION'], 403);
         }
 
         $request->merge(['user_token' => $tokenModel]);
