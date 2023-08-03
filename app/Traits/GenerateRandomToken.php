@@ -31,6 +31,9 @@ trait GenerateRandomToken
     {
         $this->forceFill([
             'token' => Str::random(64),
+            'created_at' => now(),
+            'updated_at' => now(),
+            'expires_at' => null,
         ]);
     }
 }
