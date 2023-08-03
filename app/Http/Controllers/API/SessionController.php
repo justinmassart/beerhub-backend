@@ -7,6 +7,7 @@ use App\Http\Requests\LoginFormRequest;
 use App\Http\Requests\LogoutFormRequest;
 use App\Http\Requests\RegisterFormRequest;
 use App\Http\Requests\VerifyPhoneFormRequest;
+use App\Models\PersonalAccessToken;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserPhoneVerification;
@@ -81,9 +82,9 @@ class SessionController extends Controller
                     'code' => $verificationCode,
                 ]);
 
-                $sid = getenv("TWILIO_ACCOUNT_SID");
-                $token = getenv("TWILIO_AUTH_TOKEN");
-                $messagingServiceSid = getenv("TWILIO_MESSAGING_SERVICE_SID");
+                $sid = env("TWILIO_ACCOUNT_SID");
+                $token = env("TWILIO_AUTH_TOKEN");
+                $messagingServiceSid = env("TWILIO_MESSAGING_SERVICE_SID");
 
                 $twilio = new Client($sid, $token);
 
@@ -114,14 +115,13 @@ class SessionController extends Controller
 
         if ($validated) {
             try {
-                DB::beginTransaction();
-
-                $validated['phone'] = '+' . $validated['phone'];
-
                 $user = User::where('phone', $validated['phone'])->first();
+
                 $userVerification = UserPhoneVerification::where('user_id', $user->id)->first();
 
                 if (intval($validated['code']) === $userVerification->code && $validated['phone'] === $userVerification->user_phone) {
+
+                    DB::beginTransaction();
 
                     $user->phone_verified_at = now();
 
@@ -157,17 +157,24 @@ class SessionController extends Controller
             return response()->json(['ERROR' => 'EMAIL_NOT_EXISTS'], 401);
         }
 
-        if (!$user->email_verified_at) {
-            return response()->json(['ERROR' => 'EMAIL_NOT_VERIFIED'], 401);
+        if (!$user->phone_verified_at) {
+            return response()->json(['ERROR' => 'PHONE_NOT_VERIFIED'], 401);
         }
 
         if (!Hash::check($validated['password'], $user->password)) {
             return response()->json(['ERROR' => 'WRONG_PASSWORD'], 401);
         }
 
+        $authToken = PersonalAccessToken::create([
+            'user_id' => $user->id,
+            'name' => $validated['device_name'],
+            'abilities' => 'user',
+            'platform' => 'app',
+        ]);
+
         Auth::login($user);
 
-        return response()->json(['user' => $user, 'authToken' => $user->createToken($validated['device_name'])->plainTextToken]);
+        return response()->json(['user' => $user, 'authToken' => $authToken->token], 200);
     }
 
     public function logout(LogoutFormRequest $request)
