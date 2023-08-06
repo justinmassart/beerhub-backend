@@ -146,15 +146,15 @@ class SessionController extends Controller
     {
 
         $validated = $request->safe()->only(
-            'email',
+            'phone',
             'password',
             'device_name',
         );
 
-        $user = User::where('email', $validated['email'])->first();
+        $user = User::where('phone', $validated['phone'])->first();
 
         if (!$user) {
-            return response()->json(['ERROR' => 'EMAIL_NOT_EXISTS'], 401);
+            return response()->json(['ERROR' => 'PHONE_NOT_EXISTS'], 401);
         }
 
         if (!$user->phone_verified_at) {
@@ -172,31 +172,28 @@ class SessionController extends Controller
             'platform' => 'app',
         ]);
 
-        Auth::login($user);
-
         return response()->json(['user' => $user, 'authToken' => $authToken->token], 200);
     }
 
     public function logout(LogoutFormRequest $request)
     {
+        $validated = $request->safe()->only('id');
 
-        try {
-            $validated = $request->validated();
-        } catch (ValidationException $exception) {
-            return response()->json(['ERROR' => 'Validation failed', 'message' => $exception->errors()], 422);
+        if ($validated) {
+            $user = User::where('id', $validated['id'])->first();
+
+            if (!$user) {
+                return response()->json(['ERROR' => 'USER_NOT_FOUND'], 404);
+            }
+
+            $personalAccessToken = PersonalAccessToken::where('user_id', $validated['id'])->first();
+
+            $personalAccessToken->delete();
+
+            return response()->json(['SUCCESS' => 'TOKEN_REVOKED'], 200);
+        } else {
+            return response()->json(['ERROR' => 'COULD_NOT_VALIDATE'], 404);
         }
-
-        $user = User::where('id', $validated['id'])->first();
-
-        if (!$user) {
-            return response()->json(['ERROR' => 'USER_NOT_FOUND'], 404);
-        }
-
-        $user->tokens()->delete();
-
-        Auth::logout($user);
-
-        return response()->json(['SUCCESS' => 'TOKEN_REVOKED'], 200);
     }
 
     public function update()
