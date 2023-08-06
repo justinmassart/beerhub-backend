@@ -47,6 +47,6 @@ Route::post('/register', [SessionController::class,  'register'])->middleware(['
 
 Route::post('/login', [SessionController::class, 'login'])->middleware(['setLocale', 'guest']);
 
-Route::post('/logout', [SessionController::class, 'logout'])->middleware('auth');
+Route::post('/logout', [SessionController::class, 'logout'])->middleware(['api.user', 'setLocale']);
 
 Route::post('/verify', [SessionController::class, 'verifyPhone'])->middleware('guest');
