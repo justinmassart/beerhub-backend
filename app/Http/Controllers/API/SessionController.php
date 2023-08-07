@@ -165,14 +165,35 @@ class SessionController extends Controller
             return response()->json(['ERROR' => 'WRONG_PASSWORD'], 401);
         }
 
-        $authToken = PersonalAccessToken::create([
-            'user_id' => $user->id,
-            'name' => $validated['device_name'],
-            'abilities' => 'user',
-            'platform' => 'app',
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return response()->json(['user' => $user, 'authToken' => $authToken->token], 200);
+            $token = PersonalAccessToken::where('user_id', $user->id)->first();
+
+            if ($token && $token->name === $validated['device_name']) {
+                $token->delete();
+            }
+
+            $authToken = PersonalAccessToken::create([
+                'user_id' => $user->id,
+                'name' => $validated['device_name'],
+                'abilities' => 'user',
+                'platform' => 'app',
+            ]);
+
+            DB::commit();
+
+            $role = Role::where('user_id', $user->id)->first();
+
+            if (!$role) {
+                return response()->json(['ERROR' => 'NO_ACCESS_RIGHTS_SET_FOR_USER'], 404);
+            }
+
+            return response()->json(['user' => $user, 'authToken' => $authToken->token, 'accessRights' => $role->access_rights], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['ERROR' => $e->getMessage()], 401);
+        }
     }
 
     public function logout(LogoutFormRequest $request)
@@ -186,7 +207,7 @@ class SessionController extends Controller
                 return response()->json(['ERROR' => 'USER_NOT_FOUND'], 404);
             }
 
-            $personalAccessToken = PersonalAccessToken::where('user_id', $validated['id'])->first();
+            $personalAccessToken = PersonalAccessToken::where('user_id', $user->id)->first();
 
             $personalAccessToken->delete();
 
