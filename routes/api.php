@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\API\SessionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BeerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PlaceController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +40,13 @@ Route::get('/{locale?}/brands/{id}/', [BrandController::class, 'show'])->middlew
 // Places
 
 Route::get('/{locale?}/places', [PlaceController::class, 'index'])->middleware('setLocale');
+
+// Auth
+
+Route::post('/register', [SessionController::class,  'register'])->middleware(['setLocale', 'guest']);
+
+Route::post('/login', [SessionController::class, 'login'])->middleware(['setLocale', 'guest']);
+
+Route::post('/logout', [SessionController::class, 'logout'])->middleware(['api.user', 'setLocale']);
+
+Route::post('/verify', [SessionController::class, 'verifyPhone'])->middleware('guest');
