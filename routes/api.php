@@ -31,6 +31,7 @@ Route::get('/{locale?}/', [HomeController::class, 'index'])->middleware('setLoca
 // Beers
 
 Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware('setLocale');
+Route::post('/beers/store', [BeerController::class, 'store'])->middleware('api.user');
 
 // Brands
 
@@ -43,10 +44,10 @@ Route::get('/{locale?}/places', [PlaceController::class, 'index'])->middleware('
 
 // Auth
 
-Route::post('/register', [SessionController::class,  'register'])->middleware(['setLocale', 'guest']);
+Route::post('/register', [SessionController::class,  'register'])->middleware('guest');
 
-Route::post('/login', [SessionController::class, 'login'])->middleware(['setLocale', 'guest']);
+Route::post('/login', [SessionController::class, 'login'])->middleware('guest');
 
-Route::post('/logout', [SessionController::class, 'logout'])->middleware(['api.user', 'setLocale']);
+Route::post('/logout', [SessionController::class, 'logout'])->middleware('api.user');
 
 Route::post('/verify', [SessionController::class, 'verifyPhone'])->middleware('guest');
