@@ -40,7 +40,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
     public function user_preferences()
@@ -61,5 +61,10 @@ class User extends Authenticatable
     public function token()
     {
         return $this->hasOne(PersonalAccessToken::class);
+    }
+
+    public function added_beer()
+    {
+        return $this->hasMany(BeerAddedByUser::class);
     }
 }

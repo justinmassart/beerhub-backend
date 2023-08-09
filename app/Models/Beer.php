@@ -38,4 +38,9 @@ class Beer extends Model
     {
         return $this->hasMany(BeerTranslation::class);
     }
+
+    public function added_by()
+    {
+        return $this->hasOne(BeerAddedByUser::class);
+    }
 }
