@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBeerFormRequest;
 use App\Models\Beer;
+use App\Models\BeerAddedByUser;
+use App\Models\PersonalAccessToken;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -41,52 +44,56 @@ class BeerController extends Controller
      */
     public function store(StoreBeerFormRequest $request)
     {
+        $validated = $request->safe();
 
-        $validated = $request->safe()->only(
-            'name',
-            'brand',
-            'country',
-            'type',
-            'color',
-            'abv',
-            'volume_available',
-            'volume_available.*',
-            'container_available',
-            'container_available.*',
-            'aromas',
-            'aromas.*',
-            'ingredients',
-            'ingredients.*',
-            'ibu',
-            'is_gluten_free',
-            'is_from_abbey',
-            'non_filtered',
-            'refermented',
-        );
+        $authToken = $request->bearerToken();
+
+        if (!$authToken) {
+            return response()->json(['ERROR' => 'UNAUTHORIZED'], 401);
+        }
+
+        $token = PersonalAccessToken::where('token', $authToken)->first();
+
+        if (!$token) {
+            return response()->json(['ERROR' => 'TOKEN_NOT_FOUND'], 404);
+        }
+
+        $user = User::where('id', $token->user_id)->first();
+
+        if (!$user) {
+            return response()->json(['ERROR' => 'USER_NOT_FOUND'], 404);
+        }
 
         if ($validated) {
             try {
+
                 DB::beginTransaction();
 
                 $beer = Beer::create([
                     'name' => $validated['name'],
-                    'brand' => $validated['brand'],
                     'country' => $validated['country'],
                     'type' => $validated['type'],
                     'color' => $validated['color'],
                     'abv' => $validated['abv'],
-                    'volume_available' => $validated['volume_available'],
-                    'container_available' => $validated['container_available'],
-                    'aromas' => $validated['aromas'],
-                    'ingredients' => $validated['ingredients'],
-                    'ibu' => $validated['ibu'],
-                    'is_gluten_free' => $validated['is_gluten_free'],
-                    'is_from_abbey' => $validated['is_from_abbey'],
-                    'non_filtered' => $validated['non_filtered'],
-                    'refermented' => $validated['refermented'],
+                    'volume_available' => $validated['volume_available'] ?? null,
+                    'container_available' => $validated['container_available'] ?? null,
+                    'aromas' => $validated['aromas'] ?? null,
+                    'ingredients' => $validated['ingredients'] ?? null,
+                    'ibu' => $validated['ibu'] ?? null,
+                    'is_gluten_free' => $validated['is_gluten_free'] ?? null,
+                    'is_from_abbey' => $validated['is_from_abbey'] ?? null,
+                    'non_filtered' => $validated['non_filtered'] ?? null,
+                    'refermented' => $validated['refermented'] ?? null,
                 ]);
 
                 $beer->save();
+
+                $beer_added_by_user = BeerAddedByUser::create([
+                    'beer_id' => $beer->id,
+                    'added_by_user_id' => $user->id,
+                ]);
+
+                $beer_added_by_user->save();
 
                 DB::commit();
 
@@ -94,7 +101,7 @@ class BeerController extends Controller
             } catch (\Exception $e) {
                 DB::rollBack();
 
-                return response()->json(['ERROR' => 'COULD_NOT_CREATE_BEER'], 404);
+                return response()->json(['ERROR' => $e->getMessage()], 404);
             }
         } else {
             return response()->json(['ERROR' => 'FORM_NOT_VALID'], 404);
