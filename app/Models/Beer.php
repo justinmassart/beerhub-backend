@@ -14,6 +14,8 @@ class Beer extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $guarded = [];
+
     public function brand()
     {
         return $this->hasOne(BeerBrand::class);
