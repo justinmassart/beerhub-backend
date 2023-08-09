@@ -22,12 +22,12 @@ class StoreBeerFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|alpha_num',
-            'brand' => 'required|alpha_num',
+            'name' => 'required',
+            'brand' => 'required',
             'country' => 'required|alpha',
             'type' => 'required|alpha',
             'color' => 'required|alpha',
-            'abv' => 'required|numeric',
+            'abv' => 'required',
             'volume_available' => 'array',
             'volume_available.*' => 'string',
             'container_available' => 'array',
