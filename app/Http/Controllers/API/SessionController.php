@@ -46,7 +46,8 @@ class SessionController extends Controller
             'lastname',
             'username',
             'email',
-            'phone',
+            'phoneNumber',
+            'callingCode',
             'country',
             'password',
         );
@@ -57,12 +58,14 @@ class SessionController extends Controller
 
                 $userPref = UserPreference::factory()->create();
 
+                $phoneNumber = $validated['callingCode'] . $validated['phoneNumber'];
+
                 $user = User::create([
                     'firstname' => $validated['firstname'],
                     'lastname' => $validated['lastname'],
                     'username' => $validated['username'],
                     'email' => $validated['email'],
-                    'phone' => $validated['phone'],
+                    'phone' => $phoneNumber,
                     'password' => bcrypt($validated['password']),
                     'DOB' => '2000-11-09',
                     'country' => $validated['country'],
@@ -78,7 +81,7 @@ class SessionController extends Controller
 
                 UserPhoneVerification::create([
                     'user_id' => $user->id,
-                    'user_phone' => $validated['phone'],
+                    'user_phone' => $phoneNumber,
                     'code' => $verificationCode,
                 ]);
 
@@ -90,7 +93,7 @@ class SessionController extends Controller
 
                 $message = $twilio->messages
                     ->create(
-                        $validated['phone'],
+                        $phoneNumber,
                         array(
                             "messagingServiceSid" => $messagingServiceSid,
                             "body" => "Hello ! Your verification code for Beerhub is : {$verificationCode}"

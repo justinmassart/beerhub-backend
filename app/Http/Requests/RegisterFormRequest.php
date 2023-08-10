@@ -31,8 +31,9 @@ class RegisterFormRequest extends FormRequest
             'lastname' => 'required|alpha',
             'username' => 'required|unique:users|max:24',
             'email' => 'required|email|unique:users',
-            'phone' => 'required',
-            'country' => 'required',
+            'phoneNumber' => 'required|string',
+            'callingCode' => 'required|string',
+            'country' => 'required|string',
             'password' => 'required|min:6|max:64',
         ];
     }
