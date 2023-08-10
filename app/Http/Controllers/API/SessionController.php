@@ -146,12 +146,15 @@ class SessionController extends Controller
     {
 
         $validated = $request->safe()->only(
-            'phone',
+            'callingCode',
+            'phoneNumber',
             'password',
             'device_name',
         );
 
-        $user = User::where('phone', $validated['phone'])->first();
+        $phoneNumber = $validated['callingCode'] . $validated['phoneNumber'];
+
+        $user = User::where('phone', $phoneNumber)->first();
 
         if (!$user) {
             return response()->json(['ERROR' => 'PHONE_NOT_EXISTS'], 401);
