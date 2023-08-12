@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name')->unique();
+            $table->string('name')->unique()->index();
             $table->string('slogan')->nullable();
             $table->string('address')->unique();
             $table->float('latitude');
@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('country');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(['name']);
         });
     }
 

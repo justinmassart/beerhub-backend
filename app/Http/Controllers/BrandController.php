@@ -26,6 +26,25 @@ class BrandController extends Controller
         return compact('brands');
     }
 
+    public function input(Request $request)
+    {
+        $search_term = $request->query('search_term');
+
+        if ($search_term) {
+            $searchResults = Brand::search($search_term)->get();
+
+            $brandIds = $searchResults->pluck('id')->all();
+
+            $brands = Brand::whereIn('id', $brandIds)
+                ->select('id', 'name')
+                ->get();
+
+            return compact('brands');
+        } else {
+            return ['brands' => []];
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -37,7 +56,7 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
         //
     }
@@ -72,7 +91,7 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update()
     {
         //
     }

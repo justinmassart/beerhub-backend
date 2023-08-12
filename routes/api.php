@@ -19,28 +19,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-}); */
-
 // Home
 
-Route::get('/', [HomeController::class, 'index'])->middleware('setLocale');
-Route::get('/{locale?}/', [HomeController::class, 'index'])->middleware('setLocale');
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/{locale?}/', [HomeController::class, 'index']);
 
 // Beers
 
-Route::get('/{locale?}/beers', [BeerController::class, 'index'])->middleware('setLocale');
+Route::get('/{locale?}/beers', [BeerController::class, 'index']);
 Route::post('/beers/store', [BeerController::class, 'store'])->middleware('api.user');
 
 // Brands
 
-Route::get('/{locale?}/brands', [BrandController::class, 'index'])->middleware('setLocale');
-Route::get('/{locale?}/brands/{id}/', [BrandController::class, 'show'])->middleware('setLocale');
+Route::get('/{locale?}/brands', [BrandController::class, 'index'])->name('brands');
+Route::get('/{locale?}/brands/{id}/', [BrandController::class, 'show'])->name('brand');
 
 // Places
 
-Route::get('/{locale?}/places', [PlaceController::class, 'index'])->middleware('setLocale');
+Route::get('/{locale?}/places', [PlaceController::class, 'index']);
 
 // Auth
 
@@ -51,3 +47,7 @@ Route::post('/login', [SessionController::class, 'login'])->middleware('guest');
 Route::post('/logout', [SessionController::class, 'logout'])->middleware('api.user');
 
 Route::post('/verify', [SessionController::class, 'verifyPhone'])->middleware('guest');
+
+// Add a beer inputs
+
+Route::get('/inputs/brand-selector', [BrandController::class, 'input'])->name('brand-selector');

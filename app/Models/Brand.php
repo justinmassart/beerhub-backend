@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Brand extends Model
 {
-    use HasFactory, Uuids;
+    use HasFactory, Uuids, Searchable;
 
     protected $primaryKey = 'id';
     protected $keyType = 'string';
@@ -22,5 +23,13 @@ class Brand extends Model
     public function translations()
     {
         return $this->hasMany(BrandTranslation::class);
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
     }
 }
