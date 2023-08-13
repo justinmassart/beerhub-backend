@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BeerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\SearchInputsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -50,4 +51,6 @@ Route::post('/verify', [SessionController::class, 'verifyPhone'])->middleware('g
 
 // Add a beer inputs
 
-Route::get('/inputs/brand-selector', [BrandController::class, 'input'])->name('brand-selector');
+Route::get('/search-inputs/brand-selector', [SearchInputsController::class, 'brands'])->name('brand-selector');
+Route::get('/search-inputs/beer-type-selector', [SearchInputsController::class, 'beer_types'])->name('beer-types-selector');
+Route::get('/search-inputs/beer-color-selector', [SearchInputsController::class, 'beer_colors'])->name('beer-colors-selector');
