@@ -35,6 +35,12 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            Route::middleware(['api', 'throttle:120,1'])
+                ->prefix('api')
+                ->group(function () {
+                    Route::get('/search-inputs/beer-color-selector', [SearchInputsController::class, 'beer_colors']);
+                });
         });
     }
 }
